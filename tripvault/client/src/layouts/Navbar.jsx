@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Compass, Menu, X, Shield, ArrowRight, UserCheck } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { Compass, Menu, X, ArrowRight, UserCheck } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import appConfig from '../config/appConfig';
+import { ROUTES } from '../constants/routes';
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, user } = useAuth();
-  const navigate = useNavigate();
+
+  const brandPart1 = appConfig.appName.slice(0, 4);
+  const brandPart2 = appConfig.appName.slice(4);
 
   return (
     <header className="glass-nav" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
       <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '80px' }}>
         {/* Brand Logo & Tagline */}
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
+        <Link to={ROUTES.LANDING} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
           <div style={{
             width: '42px',
             height: '42px',
@@ -27,10 +31,10 @@ export const Navbar = () => {
           </div>
           <div>
             <span style={{ fontSize: '1.4rem', fontWeight: 800, fontFamily: 'var(--font-heading)', color: 'var(--text-main)', letterSpacing: '-0.5px' }}>
-              Trip<span className="gradient-text">Vault</span>
+              {brandPart1}<span className="gradient-text">{brandPart2}</span>
             </span>
             <span style={{ display: 'block', fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              Preserve Adventures
+              {appConfig.appName === 'ShipFlowX' ? 'Logistics Platform' : 'Preserve Adventures'}
             </span>
           </div>
         </Link>
@@ -38,16 +42,16 @@ export const Navbar = () => {
         {/* Desktop Navigation CTA */}
         <div className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           {isAuthenticated ? (
-            <Link to="/dashboard" className="btn btn-primary">
+            <Link to={ROUTES.DASHBOARD} className="btn btn-primary">
               <UserCheck size={18} />
               Go to Dashboard ({user?.name?.split(' ')[0] || 'User'})
             </Link>
           ) : (
             <>
-              <Link to="/login" className="btn btn-outline">
+              <Link to={ROUTES.LOGIN} className="btn btn-outline">
                 Login
               </Link>
-              <Link to="/register" className="btn btn-primary">
+              <Link to={ROUTES.REGISTER} className="btn btn-primary">
                 Register
                 <ArrowRight size={16} />
               </Link>
@@ -84,15 +88,15 @@ export const Navbar = () => {
           gap: '1rem'
         }}>
           {isAuthenticated ? (
-            <Link to="/dashboard" className="btn btn-primary btn-full" onClick={() => setMobileMenuOpen(false)}>
+            <Link to={ROUTES.DASHBOARD} className="btn btn-primary btn-full" onClick={() => setMobileMenuOpen(false)}>
               Go to Dashboard
             </Link>
           ) : (
             <>
-              <Link to="/login" className="btn btn-outline btn-full" onClick={() => setMobileMenuOpen(false)}>
+              <Link to={ROUTES.LOGIN} className="btn btn-outline btn-full" onClick={() => setMobileMenuOpen(false)}>
                 Login
               </Link>
-              <Link to="/register" className="btn btn-primary btn-full" onClick={() => setMobileMenuOpen(false)}>
+              <Link to={ROUTES.REGISTER} className="btn btn-primary btn-full" onClick={() => setMobileMenuOpen(false)}>
                 Register Now
               </Link>
             </>
@@ -109,3 +113,5 @@ export const Navbar = () => {
     </header>
   );
 };
+
+export default Navbar;

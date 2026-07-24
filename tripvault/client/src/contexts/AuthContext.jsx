@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import API from '../services/api';
+import appConfig from '../config/appConfig';
+import { API_ENDPOINTS } from '../constants/apiEndpoints';
 
 const AuthContext = createContext(null);
 
@@ -11,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   // Check user authentication status on initial app load
   useEffect(() => {
     const checkAuthStatus = async () => {
-      const token = localStorage.getItem('tripvault_token');
+      const token = localStorage.getItem(appConfig.tokenKey);
       if (!token) {
         setUser(null);
         setLoading(false);
@@ -19,16 +21,16 @@ export const AuthProvider = ({ children }) => {
       }
 
       try {
-        const response = await API.get('/auth/me');
+        const response = await API.get(API_ENDPOINTS.AUTH.ME);
         if (response.data?.success) {
           setUser(response.data.data);
         } else {
-          localStorage.removeItem('tripvault_token');
+          localStorage.removeItem(appConfig.tokenKey);
           setUser(null);
         }
       } catch (err) {
         console.warn('Session expired or server unavailable:', err.message);
-        localStorage.removeItem('tripvault_token');
+        localStorage.removeItem(appConfig.tokenKey);
         setUser(null);
       } finally {
         setLoading(false);
@@ -42,10 +44,10 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setError(null);
     try {
-      const response = await API.post('/auth/login', { email, password });
+      const response = await API.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
       const { token, ...userData } = response.data.data;
       
-      localStorage.setItem('tripvault_token', token);
+      localStorage.setItem(appConfig.tokenKey, token);
       setUser(userData);
       return { success: true };
     } catch (err) {
@@ -58,7 +60,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, password, confirmPassword) => {
     setError(null);
     try {
-      const response = await API.post('/auth/register', {
+      const response = await API.post(API_ENDPOINTS.AUTH.REGISTER, {
         name,
         email,
         password,
@@ -66,7 +68,7 @@ export const AuthProvider = ({ children }) => {
       });
       const { token, ...userData } = response.data.data;
 
-      localStorage.setItem('tripvault_token', token);
+      localStorage.setItem(appConfig.tokenKey, token);
       setUser(userData);
       return { success: true };
     } catch (err) {
@@ -77,7 +79,7 @@ export const AuthProvider = ({ children }) => {
 
   // Logout handler
   const logout = () => {
-    localStorage.removeItem('tripvault_token');
+    localStorage.removeItem(appConfig.tokenKey);
     setUser(null);
     setError(null);
   };

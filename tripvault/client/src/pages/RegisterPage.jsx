@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Compass, User, Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { ButtonLoader } from '../components/common/ButtonLoader';
+import appConfig from '../config/appConfig';
+import { ROUTES } from '../constants/routes';
+import { isValidEmail, isValidPassword } from '../utils/validators';
 
 export const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +21,9 @@ export const RegisterPage = () => {
 
   const { register } = useAuth();
   const navigate = useNavigate();
+
+  const brandPart1 = appConfig.appName.slice(0, 4);
+  const brandPart2 = appConfig.appName.slice(4);
 
   // Password Strength Calculation Helper
   const getPasswordStrength = (pass) => {
@@ -51,13 +58,18 @@ export const RegisterPage = () => {
       return;
     }
 
-    if (formData.password !== formData.confirmPassword) {
-      setErrorMessage('Passwords do not match');
+    if (!isValidEmail(formData.email)) {
+      setErrorMessage('Please enter a valid email address');
       return;
     }
 
-    if (formData.password.length < 6) {
+    if (!isValidPassword(formData.password)) {
       setErrorMessage('Password must be at least 6 characters long');
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage('Passwords do not match');
       return;
     }
 
@@ -71,7 +83,7 @@ export const RegisterPage = () => {
     setSubmitting(false);
 
     if (result.success) {
-      navigate('/dashboard');
+      navigate(ROUTES.DASHBOARD);
     } else {
       setErrorMessage(result.error || 'Registration failed. Please try again.');
     }
@@ -94,7 +106,7 @@ export const RegisterPage = () => {
       }}>
         {/* Header Logo */}
         <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', marginBottom: '1rem' }}>
+          <Link to={ROUTES.LANDING} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', marginBottom: '1rem' }}>
             <div style={{
               width: '46px',
               height: '46px',
@@ -108,14 +120,14 @@ export const RegisterPage = () => {
               <Compass size={26} color="#FFFFFF" />
             </div>
             <span style={{ fontSize: '1.6rem', fontWeight: 800, fontFamily: 'var(--font-heading)', color: 'var(--text-main)' }}>
-              Trip<span className="gradient-text">Vault</span>
+              {brandPart1}<span className="gradient-text">{brandPart2}</span>
             </span>
           </Link>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.4rem' }}>
             Create Your Account
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            Start preserving your global adventures today
+            {appConfig.appName === 'ShipFlowX' ? 'Start managing shipments and operations today' : 'Start preserving your global adventures today'}
           </p>
         </div>
 
@@ -243,15 +255,21 @@ export const RegisterPage = () => {
             disabled={submitting}
             style={{ padding: '0.85rem', fontSize: '1rem', marginTop: '0.5rem' }}
           >
-            {submitting ? 'Creating Account...' : 'Create Account'}
-            {!submitting && <ArrowRight size={18} />}
+            {submitting ? (
+              <ButtonLoader message="Creating Account..." />
+            ) : (
+              <>
+                <span>Create Account</span>
+                <ArrowRight size={18} />
+              </>
+            )}
           </button>
         </form>
 
         {/* Footer Link */}
         <div style={{ textAlign: 'center', marginTop: '1.75rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
           Already have an account?{' '}
-          <Link to="/login" style={{ fontWeight: 600, color: 'var(--accent)' }}>
+          <Link to={ROUTES.LOGIN} style={{ fontWeight: 600, color: 'var(--accent)' }}>
             Log In Here
           </Link>
         </div>
@@ -259,3 +277,5 @@ export const RegisterPage = () => {
     </div>
   );
 };
+
+export default RegisterPage;

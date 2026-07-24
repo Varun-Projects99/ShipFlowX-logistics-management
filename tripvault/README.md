@@ -1,59 +1,58 @@
-# ✈️ TripVault - Capture Memories. Preserve Adventures.
+# 🚢 ShipFlowX - Enterprise Logistics Management & Real-Time Shipment Tracking Platform
 
-> **TripVault** is a modern, high-performance travel memory journal built with the **MERN Stack** (MongoDB, Express, React 19, Node.js). Users can securely register, login, store travel journals, organize photo memories, and revisit past adventures.
-
----
-
-## 🌟 Features (Week 1 Implementation)
-
-- **Authentication System**: Secure JWT-based authentication with `bcryptjs` password hashing and token persistence in `localStorage`.
-- **Validation**:
-  - Full Name, Email format, and Password strength meter (Weak/Medium/Strong).
-  - Password matching verification and interactive Show/Hide password toggle.
-- **Responsive Landing Page**:
-  - High-impact Hero section with tagline and call-to-action buttons.
-  - Interactive Feature cards grid highlighting core platform capabilities.
-  - Responsive footer and navigation drawer.
-- **Personalized Dashboard**:
-  - User welcome header displaying dynamic user profile data.
-  - Metric cards for **My Trips**, **Memories**, **Photos**, and **Countries Visited**.
-  - Quick action buttons and recent activity tracking.
-- **Future-Ready Architecture**: Modular directory layout pre-configured for Trip CRUD, Cloudinary Photo Uploads, Interactive Maps, Timeline Views, and Travel Analytics.
+> **ShipFlowX** is a modern, high-performance logistics management and shipment tracking system built with the **MERN Stack** (MongoDB, Express, React 19, Node.js). This update introduces professional Week 1 architectural improvements, structuring the project for enterprise maintainability without changing any existing UI/UX or business flows.
 
 ---
 
-## 🎨 Design System & Aesthetics
+## 🌟 Week 1 Architecture & Engineering Improvements
 
-- **Color Palette**:
-  - **Background**: `#0F172A` (Deep Slate Dark Mode)
-  - **Cards**: `#1E293B` (Glassmorphic Slate)
-  - **Primary**: `#3B82F6` (Electric Blue)
-  - **Accent**: `#06B6D4` (Cyan Glow)
-  - **Success**: `#22C55E` | **Warning**: `#F59E0B` | **Error**: `#EF4444`
-- **UI Effects**: Glassmorphism, smooth CSS micro-interactions, soft shadows, custom typography (`Inter` & `Outfit` fonts).
+- **Centralized Configuration (`src/config/appConfig.js`)**:
+  - Unifies application branding, versioning, default locale, theme settings, and pagination sizes.
+  - Dynamically resolved through Vite environment variables (`import.meta.env`) with safe local fallbacks.
+- **Reusable Loading Components (`src/components/common/`)**:
+  - **`Spinner.jsx`**: Fully customizable animated SVG loader with built-in WAI-ARIA loading accessibility support.
+  - **`Loader.jsx`**: Inline or block-level loading state wrapper.
+  - **`PageLoader.jsx`**: Full-screen page loader modal overlay for initial system boot or route changes.
+  - **`ButtonLoader.jsx`**: In-button loading spinner for active async transactions.
+- **Environment Configuration**:
+  - Added `.env.example` defining environment variables: `VITE_APP_NAME`, `VITE_API_URL`, `VITE_GOOGLE_CLIENT_ID`, `VITE_COMPANY_NAME`, `VITE_SUPPORT_EMAIL`.
+- **Constants Definition (`src/constants/`)**:
+  - **`routes.js`**: Core route path mapping constants (Landing, Dashboard, Login, profile, etc.).
+  - **`apiEndpoints.js`**: Reusable REST API endpoint definitions (Auth, Trips, Memories, Photos, etc.).
+  - **`colors.js`**: Core design system color theme constants.
+  - **`roles.js`**: System authorization roles (Admin, Dispatcher, Driver, Customer, User).
+  - **`shipmentStatus.js`**: Shipment status tracking variables (`PENDING`, `IN_TRANSIT`, `DELIVERED`, etc.).
+- **Utility Functions (`src/utils/`)**:
+  - **`dateFormatter.js`**: Reusable date formatters (relative times, standard locales).
+  - **`currencyFormatter.js`**: Locale-aware currency formatting with customizable fraction sizes.
+  - **`trackingNumberGenerator.js`**: Generates carrier-compliant unique tracking numbers.
+  - **`validators.js`**: client-side validation logic (email structures, password lengths).
+  - **`helpers.js`**: General helpers (debounce, truncate text, safe JSON parsing).
 
 ---
 
-## 📁 Directory & Folder Structure
+## 📁 Refactored Folder Structure
 
 ```
 tripvault/
 ├── client/                     # Frontend React 19 + Vite Application
 │   ├── src/
-│   │   ├── assets/             # SVGs, icons, and static assets
-│   │   ├── components/         # Reusable UI & Layout Components
-│   │   │   ├── common/         # ProtectedRoute guard
-│   │   │   └── layout/         # Navbar, Footer, AppNavbar, AppSidebar, AppLayout
-│   │   ├── contexts/           # AuthContext (state management & API calls)
-│   │   ├── hooks/              # Custom React hooks
-│   │   ├── pages/              # Landing, Login, Register, Dashboard, Placeholders
-│   │   ├── services/           # Axios API configuration & interceptors
-│   │   ├── styles/             # Global index.css design tokens & glassmorphism
-│   │   ├── App.jsx             # React Router DOM 7 configuration
+│   │   ├── assets/             # Static assets, images, and SVGs
+│   │   ├── config/             # Centralized config (appConfig.js)
+│   │   ├── constants/          # Reusable routes, colors, role constants
+│   │   ├── components/         # Reusable UI components
+│   │   │   └── common/         # PageLoader, ButtonLoader, Spinner, Modal
+│   │   ├── context/            # Global context state (AuthContext.jsx)
+│   │   ├── layouts/            # Layout shells (AppLayout, Navbar, Sidebar)
+│   │   ├── pages/              # Views (Dashboard, Login, Gallery, etc.)
+│   │   ├── services/           # Axios HTTP API instance & interceptors
+│   │   ├── utils/              # Helper utilities (date, currency, validators)
+│   │   ├── styles/             # Global CSS design tokens
+│   │   ├── App.jsx             # React Router DOM configuration
 │   │   └── main.jsx            # React root entry point
+│   ├── .env.example            # Environment variables configuration template
 │   ├── index.html
-│   ├── package.json
-│   └── vite.config.js
+│   └── package.json
 │
 ├── server/                     # Backend Node.js + Express API
 │   ├── config/                 # Database connection (db.js)
@@ -61,90 +60,25 @@ tripvault/
 │   ├── middleware/             # Route protection middleware (authMiddleware.js)
 │   ├── models/                 # Mongoose schemas (User.js)
 │   ├── routes/                 # API route declarations (authRoutes.js)
-│   ├── services/               # Future business logic services
-│   ├── utils/                  # JWT token utilities (jwt.js)
-│   ├── .env                    # Environment configuration
-│   ├── .env.example            # Environment template
-│   ├── index.js                # Express app entry point
-│   └── package.json
-│
-├── .gitignore
-└── README.md
+│   └── index.js                # Express app entry point
 ```
 
 ---
 
 ## ⚡ Quick Start & Setup Guide
 
-### 1. Prerequisites
-- **Node.js** (v18 or higher)
-- **MongoDB** (Local instance running on `mongodb://127.0.0.1:27017` or MongoDB Atlas Connection URI)
+### 1. Environment Variables Configuration
+Copy `.env.example` in the `client` directory to `.env` and fill in the values:
+```bash
+cp client/.env.example client/.env
+```
 
----
-
-### 2. Backend Setup (`server`)
-
-1. Navigate to the server folder:
-   ```bash
-   cd tripvault/server
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Configure environment variables in `.env`:
-   ```env
-   PORT=5000
-   MONGO_URI=mongodb://127.0.0.1:27017/tripvault
-   JWT_SECRET=your_super_secret_jwt_key
-   ```
-4. Start the backend server:
-   ```bash
-   # Production mode
-   npm start
-
-   # Development mode (with watching)
-   npm run dev
-   ```
-   > Server will run at `http://localhost:5000`
-
----
-
-### 3. Frontend Setup (`client`)
-
-1. Navigate to the client folder in a new terminal window:
-   ```bash
-   cd tripvault/client
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Launch the Vite development server:
-   ```bash
-   npm run dev
-   ```
-   > Client will run at `http://localhost:3000`
-
----
-
-## 🔗 Backend API Reference
-
-### Auth Endpoints
-
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/register` | Public | Register new user (name, email, password, confirmPassword) |
-| `POST` | `/api/auth/login` | Public | Authenticate user & return JWT token |
-| `GET` | `/api/auth/me` | Protected | Fetch current user profile (requires `Bearer <JWT>`) |
-| `GET` | `/api/health` | Public | API health status check |
-
----
-
-## 🚀 Future Roadmap & Scope (Week 2 & Beyond)
-
-- [ ] **Trip Management (CRUD)**: Create, view, update, and delete travel itineraries.
-- [ ] **Cloudinary Integration**: Direct client photo uploads to cloud storage.
-- [ ] **Interactive Maps**: Mapbox / Leaflet integration for pinning visited spots.
-- [ ] **Travel Analytics**: Visual charts for distance traveled and country progress.
-- [ ] **Dark/Light Mode Switcher**: User customizable theme toggling.
+### 2. Launch Development Servers
+- **Backend Server (`server`)**:
+  ```bash
+  cd server && npm run dev
+  ```
+- **Frontend App (`client`)**:
+  ```bash
+  cd client && npm run dev
+  ```

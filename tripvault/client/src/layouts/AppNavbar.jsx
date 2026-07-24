@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Compass, Search, Bell, LogOut, User as UserIcon, Menu } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
+import appConfig from '../config/appConfig';
+import { ROUTES } from '../constants/routes';
 
 export const AppNavbar = ({ onToggleSidebar }) => {
   const { user, logout } = useAuth();
@@ -9,10 +11,13 @@ export const AppNavbar = ({ onToggleSidebar }) => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate(ROUTES.LOGIN);
   };
 
   const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : 'U';
+
+  const brandPart1 = appConfig.appName.slice(0, 4);
+  const brandPart2 = appConfig.appName.slice(4);
 
   return (
     <header className="glass-nav" style={{
@@ -43,7 +48,7 @@ export const AppNavbar = ({ onToggleSidebar }) => {
             <Menu size={22} />
           </button>
 
-          <Link to="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none' }}>
+          <Link to={ROUTES.DASHBOARD} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none' }}>
             <div style={{
               width: '34px',
               height: '34px',
@@ -55,8 +60,8 @@ export const AppNavbar = ({ onToggleSidebar }) => {
             }}>
               <Compass size={20} color="#FFFFFF" />
             </div>
-            <span style={{ fontSize: '1.2rem', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
-              Trip<span className="gradient-text">Vault</span>
+            <span style={{ fontSize: '1.2rem', fontWeight: 800, fontFamily: 'var(--font-heading)', color: 'var(--text-main)' }}>
+              {brandPart1}<span className="gradient-text">{brandPart2}</span>
             </span>
           </Link>
         </div>
@@ -80,7 +85,7 @@ export const AppNavbar = ({ onToggleSidebar }) => {
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && e.target.value.trim()) {
-                  window.location.href = `/trips?search=${encodeURIComponent(e.target.value.trim())}`;
+                  window.location.href = `${ROUTES.TRIPS}?search=${encodeURIComponent(e.target.value.trim())}`;
                 }
               }}
             />
@@ -134,7 +139,7 @@ export const AppNavbar = ({ onToggleSidebar }) => {
             </div>
             <div style={{ display: 'none' }} className="user-name-display">
               <span style={{ fontSize: '0.875rem', fontWeight: 600, display: 'block', color: 'var(--text-main)' }}>
-                {user?.name || 'Traveler'}
+                {user?.name || 'User'}
               </span>
               <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', display: 'block' }}>
                 {user?.email || ''}
@@ -167,3 +172,5 @@ export const AppNavbar = ({ onToggleSidebar }) => {
     </header>
   );
 };
+
+export default AppNavbar;

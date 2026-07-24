@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
-import { AppLayout } from './components/layout/AppLayout';
+import { AppLayout } from './layouts/AppLayout';
 import { LandingPage } from './pages/LandingPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
@@ -14,6 +14,7 @@ import { StatisticsPage } from './pages/StatisticsPage';
 import { FavoritesPage } from './pages/FavoritesPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { SettingsPage } from './pages/SettingsPage';
+import { ROUTES } from './constants/routes';
 
 export const App = () => {
   return (
@@ -21,26 +22,26 @@ export const App = () => {
       <AuthProvider>
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path={ROUTES.LANDING} element={<LandingPage />} />
+          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+          <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
 
           {/* Protected Application Routes */}
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/trips" element={<TripsPage />} />
-              <Route path="/gallery" element={<GalleryPage />} />
-              <Route path="/timeline" element={<MemoriesPage />} />
-              <Route path="/statistics" element={<StatisticsPage />} />
-              <Route path="/favorites" element={<FavoritesPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/settings" element={<SettingsPage />} />
+              <Route path={ROUTES.DASHBOARD} element={<DashboardPage />} />
+              <Route path={ROUTES.TRIPS} element={<TripsPage />} />
+              <Route path={ROUTES.GALLERY} element={<GalleryPage />} />
+              <Route path={ROUTES.TIMELINE} element={<MemoriesPage />} />
+              <Route path={ROUTES.STATISTICS} element={<StatisticsPage />} />
+              <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
+              <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+              <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
             </Route>
           </Route>
 
           {/* Catch-all 404 Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to={ROUTES.LANDING} replace />} />
         </Routes>
       </AuthProvider>
     </Router>

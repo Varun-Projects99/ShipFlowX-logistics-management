@@ -4,7 +4,6 @@ import { AppNavbar } from './AppNavbar';
 import { AppSidebar } from './AppSidebar';
 
 export const AppLayout = () => {
-  // Set sidebar to closed (compact icons mode) by default as requested
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -32,3 +31,5 @@ export const AppLayout = () => {
     </div>
   );
 };
+
+export default AppLayout;

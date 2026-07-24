@@ -3,6 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Compass, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ForgotPasswordModal } from '../components/common/ForgotPasswordModal';
+import { ButtonLoader } from '../components/common/ButtonLoader';
+import appConfig from '../config/appConfig';
+import { ROUTES } from '../constants/routes';
+import { isValidEmail } from '../utils/validators';
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +21,9 @@ export const LoginPage = () => {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  const brandPart1 = appConfig.appName.slice(0, 4);
+  const brandPart2 = appConfig.appName.slice(4);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,12 +42,17 @@ export const LoginPage = () => {
       return;
     }
 
+    if (!isValidEmail(formData.email)) {
+      setErrorMessage('Please enter a valid email address');
+      return;
+    }
+
     setSubmitting(true);
     const result = await login(formData.email, formData.password);
     setSubmitting(false);
 
     if (result.success) {
-      navigate('/dashboard');
+      navigate(ROUTES.DASHBOARD);
     } else {
       setErrorMessage(result.error || 'Failed to login. Please check your credentials.');
     }
@@ -63,7 +75,7 @@ export const LoginPage = () => {
       }}>
         {/* Header Logo */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', marginBottom: '1rem' }}>
+          <Link to={ROUTES.LANDING} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', marginBottom: '1rem' }}>
             <div style={{
               width: '46px',
               height: '46px',
@@ -77,14 +89,14 @@ export const LoginPage = () => {
               <Compass size={26} color="#FFFFFF" />
             </div>
             <span style={{ fontSize: '1.6rem', fontWeight: 800, fontFamily: 'var(--font-heading)', color: 'var(--text-main)' }}>
-              Trip<span className="gradient-text">Vault</span>
+              {brandPart1}<span className="gradient-text">{brandPart2}</span>
             </span>
           </Link>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.4rem' }}>
             Welcome Back
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            Log in to access your travel memory journal
+            {appConfig.appName === 'ShipFlowX' ? 'Log in to manage enterprise logistics & tracking' : 'Log in to access your travel memory journal'}
           </p>
         </div>
 
@@ -176,15 +188,21 @@ export const LoginPage = () => {
             disabled={submitting}
             style={{ padding: '0.85rem', fontSize: '1rem' }}
           >
-            {submitting ? 'Authenticating...' : 'Sign In'}
-            {!submitting && <ArrowRight size={18} />}
+            {submitting ? (
+              <ButtonLoader message="Authenticating..." />
+            ) : (
+              <>
+                <span>Sign In</span>
+                <ArrowRight size={18} />
+              </>
+            )}
           </button>
         </form>
 
         {/* Footer Link */}
         <div style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
           Don't have an account?{' '}
-          <Link to="/register" style={{ fontWeight: 600, color: 'var(--accent)' }}>
+          <Link to={ROUTES.REGISTER} style={{ fontWeight: 600, color: 'var(--accent)' }}>
             Create an Account
           </Link>
         </div>
@@ -198,3 +216,5 @@ export const LoginPage = () => {
     </div>
   );
 };
+
+export default LoginPage;

@@ -11,7 +11,8 @@ import {
   Settings as SettingsIcon,
   LogOut
 } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
+import { ROUTES } from '../constants/routes';
 
 export const AppSidebar = ({ isOpen, onClose }) => {
   const { logout } = useAuth();
@@ -19,18 +20,18 @@ export const AppSidebar = ({ isOpen, onClose }) => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate(ROUTES.LOGIN);
   };
 
   const navItems = [
-    { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { label: 'My Trips', path: '/trips', icon: MapPin },
-    { label: 'Gallery', path: '/gallery', icon: ImageIcon },
-    { label: 'Timeline', path: '/timeline', icon: Clock },
-    { label: 'Statistics', path: '/statistics', icon: BarChart3 },
-    { label: 'Favorites', path: '/favorites', icon: Heart },
-    { label: 'Profile', path: '/profile', icon: User },
-    { label: 'Settings', path: '/settings', icon: SettingsIcon },
+    { label: 'Dashboard', path: ROUTES.DASHBOARD, icon: LayoutDashboard },
+    { label: 'My Trips', path: ROUTES.TRIPS, icon: MapPin },
+    { label: 'Gallery', path: ROUTES.GALLERY, icon: ImageIcon },
+    { label: 'Timeline', path: ROUTES.TIMELINE, icon: Clock },
+    { label: 'Statistics', path: ROUTES.STATISTICS, icon: BarChart3 },
+    { label: 'Favorites', path: ROUTES.FAVORITES, icon: Heart },
+    { label: 'Profile', path: ROUTES.PROFILE, icon: User },
+    { label: 'Settings', path: ROUTES.SETTINGS, icon: SettingsIcon },
   ];
 
   return (
@@ -110,3 +111,5 @@ export const AppSidebar = ({ isOpen, onClose }) => {
     </aside>
   );
 };
+
+export default AppSidebar;

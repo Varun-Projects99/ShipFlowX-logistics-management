@@ -1,7 +1,8 @@
 import axios from 'axios';
+import appConfig from '../config/appConfig';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: appConfig.apiUrl,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -10,7 +11,7 @@ const API = axios.create({
 // Request Interceptor: Attach JWT Token from localStorage
 API.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('tripvault_token');
+    const token = localStorage.getItem(appConfig.tokenKey);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
