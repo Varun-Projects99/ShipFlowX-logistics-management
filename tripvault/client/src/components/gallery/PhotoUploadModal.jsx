@@ -29,7 +29,7 @@ export const PhotoUploadModal = ({ isOpen, onClose, onUploadSuccess, trips = [] 
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!selectedFiles.length) {
-      setError('Please select at least one photo to upload');
+      setError('Please select at least one document to upload');
       return;
     }
 
@@ -57,14 +57,14 @@ export const PhotoUploadModal = ({ isOpen, onClose, onUploadSuccess, trips = [] 
         onClose();
       }
     } catch (err) {
-      setError(err.message || 'Failed to upload photos');
+      setError(err.message || 'Failed to upload documents');
     } finally {
       setUploading(false);
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Upload Travel Photos" maxWidth="600px">
+    <Modal isOpen={isOpen} onClose={onClose} title="Upload Shipment Documents" maxWidth="600px">
       <form onSubmit={handleUpload} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
         {error && (
           <div className="alert alert-error">
@@ -75,9 +75,9 @@ export const PhotoUploadModal = ({ isOpen, onClose, onUploadSuccess, trips = [] 
 
         {/* Association */}
         <div className="form-group" style={{ marginBottom: 0 }}>
-          <label className="form-label">Associate with Trip (Optional)</label>
+          <label className="form-label">Associate with Shipment (Optional)</label>
           <select value={tripId} onChange={(e) => setTripId(e.target.value)} className="form-input no-icon">
-            <option value="">Standalone Gallery Upload</option>
+            <option value="">Unlinked Document Upload</option>
             {trips.map(t => (
               <option key={t._id} value={t._id}>{t.title} ({t.country})</option>
             ))}
@@ -91,7 +91,7 @@ export const PhotoUploadModal = ({ isOpen, onClose, onUploadSuccess, trips = [] 
             type="text"
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
-            placeholder="e.g. Scenery captured during our morning trek"
+            placeholder="e.g. Bill of Lading receipt, gate pass copy"
             className="form-input no-icon"
           />
         </div>
@@ -125,7 +125,7 @@ export const PhotoUploadModal = ({ isOpen, onClose, onUploadSuccess, trips = [] 
           />
           <UploadCloud size={40} style={{ color: 'var(--primary)', marginBottom: '0.75rem' }} />
           <h4 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-main)' }}>
-            Drag & Drop photos here, or click to browse
+            Drag & Drop documents here, or click to browse
           </h4>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginTop: '0.25rem' }}>
             Supports JPG, PNG, WEBP (Max 10MB per file)
@@ -136,7 +136,7 @@ export const PhotoUploadModal = ({ isOpen, onClose, onUploadSuccess, trips = [] 
         {previews.length > 0 && (
           <div>
             <label className="form-label" style={{ marginBottom: '0.5rem', display: 'block' }}>
-              Selected Photos ({previews.length})
+              Selected Documents ({previews.length})
             </label>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '0.75rem' }}>
               {previews.map((src, i) => (
@@ -172,10 +172,12 @@ export const PhotoUploadModal = ({ isOpen, onClose, onUploadSuccess, trips = [] 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '0.5rem' }}>
           <button type="button" onClick={onClose} className="btn btn-secondary">Cancel</button>
           <button type="submit" disabled={uploading || !selectedFiles.length} className="btn btn-primary">
-            {uploading ? 'Uploading Media...' : `Upload ${selectedFiles.length} Photo(s)`}
+            {uploading ? 'Uploading Documents...' : `Upload ${selectedFiles.length} Document(s)`}
           </button>
         </div>
       </form>
     </Modal>
   );
 };
+
+export default PhotoUploadModal;

@@ -32,15 +32,26 @@ export const StatisticsPage = () => {
 
   const travelTypes = analytics?.travelTypeDistribution || {};
 
+  const mapCargoType = (type) => {
+    const mapping = {
+      'Solo': 'Express / Critical',
+      'Family': 'Dry Cargo',
+      'Friends': 'Bulk Freight',
+      'Business': 'Cold Chain / Temp-Controlled',
+      'Adventure': 'Hazardous Materials'
+    };
+    return mapping[type] || type;
+  };
+
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {/* Header */}
       <div>
         <h1 style={{ fontSize: '2rem', fontWeight: 800 }}>
-          Travel <span className="gradient-text">Statistics & Analytics</span>
+          Logistics & <span className="gradient-text">Shipment Analytics</span>
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.925rem' }}>
-          Deep-dive insights into your lifetime travel history, budgets, and milestones
+          Deep-dive insights into your lifetime shipping history, budgets, and delivery performance
         </p>
       </div>
 
@@ -51,7 +62,7 @@ export const StatisticsPage = () => {
             <Globe size={24} />
           </div>
           <div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Most Visited Country</div>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Top Shipment Region</div>
             <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)' }}>{analytics?.mostVisitedCountry || 'None'}</div>
           </div>
         </div>
@@ -61,7 +72,7 @@ export const StatisticsPage = () => {
             <Award size={24} />
           </div>
           <div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Est. Distance Covered</div>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Est. Transit Distance</div>
             <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)' }}>{stats?.distanceTravelled?.toLocaleString() || 0} km</div>
           </div>
         </div>
@@ -71,7 +82,7 @@ export const StatisticsPage = () => {
             <DollarSign size={24} />
           </div>
           <div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Total Travel Budget</div>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Total Logistics Freight Cost</div>
             <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)' }}>${stats?.budgetSpent?.toLocaleString() || 0}</div>
           </div>
         </div>
@@ -80,7 +91,7 @@ export const StatisticsPage = () => {
       {/* Travel Type Distribution */}
       <div className="glass-card" style={{ padding: '1.75rem' }}>
         <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.25rem' }}>
-          Travel Type Distribution
+          Cargo Type Distribution
         </h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
           {Object.entries(travelTypes).map(([type, count]) => {
@@ -88,13 +99,13 @@ export const StatisticsPage = () => {
             return (
               <div key={type} style={{ backgroundColor: 'rgba(15, 23, 42, 0.5)', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem', fontWeight: 600 }}>
-                  <span>{type}</span>
-                  <span style={{ color: 'var(--primary)' }}>{count} trip(s)</span>
+                  <span>{mapCargoType(type)}</span>
+                  <span style={{ color: 'var(--primary)' }}>{count} shipment(s)</span>
                 </div>
                 <div style={{ height: '6px', width: '100%', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderRadius: '999px', overflow: 'hidden' }}>
                   <div style={{ height: '100%', width: `${percentage}%`, backgroundColor: 'var(--primary)', transition: 'width 0.4s ease' }} />
                 </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '0.35rem' }}>{percentage}% of total trips</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '0.35rem' }}>{percentage}% of total shipments</div>
               </div>
             );
           })}
@@ -106,7 +117,7 @@ export const StatisticsPage = () => {
         {/* Longest Trip */}
         <div className="glass-card" style={{ padding: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent)', fontWeight: 600, fontSize: '0.9rem', marginBottom: '0.75rem' }}>
-            <Sparkles size={18} /> Longest Journey
+            <Sparkles size={18} /> Longest Route
           </div>
           {analytics?.longestTrip ? (
             <div>
@@ -117,14 +128,14 @@ export const StatisticsPage = () => {
               </div>
             </div>
           ) : (
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No trips logged yet to determine longest journey.</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No shipments logged yet to determine longest route.</p>
           )}
         </div>
 
         {/* Shortest Trip */}
         <div className="glass-card" style={{ padding: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--warning)', fontWeight: 600, fontSize: '0.9rem', marginBottom: '0.75rem' }}>
-            <Calendar size={18} /> Shortest Getaway
+            <Calendar size={18} /> Shortest Route
           </div>
           {analytics?.shortestTrip ? (
             <div>
@@ -135,10 +146,12 @@ export const StatisticsPage = () => {
               </div>
             </div>
           ) : (
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No trips logged yet to determine shortest getaway.</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>No shipments logged yet to determine shortest route.</p>
           )}
         </div>
       </div>
     </div>
   );
 };
+
+export default StatisticsPage;

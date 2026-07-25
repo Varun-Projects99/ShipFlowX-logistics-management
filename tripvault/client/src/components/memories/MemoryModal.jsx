@@ -40,7 +40,7 @@ export const MemoryModal = ({ isOpen, onClose, onSave, trips = [], memoryToEdit 
         weather: 'Sunny',
         rating: 5,
         trip: trips.length > 0 ? trips[0]._id : '',
-        tags: 'Journal, Highlight',
+        tags: 'Transit, Checkpoint',
         photoUrl: ''
       });
     }
@@ -63,26 +63,26 @@ export const MemoryModal = ({ isOpen, onClose, onSave, trips = [], memoryToEdit 
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={memoryToEdit ? 'Edit Memory Entry' : 'Log New Travel Memory'}
+      title={memoryToEdit ? 'Edit Shipment Log Entry' : 'Log New Shipment Event'}
       maxWidth="640px"
     >
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
         {/* Title & Trip */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Memory Title *</label>
+            <label className="form-label">Event Title / Checkpoint Name *</label>
             <input
               type="text"
               name="title"
               value={formData.title}
               onChange={handleChange}
-              placeholder="e.g. Sunset over Fushimi Inari"
+              placeholder="e.g. Arrived at Customs Clearance Hub"
               className="form-input no-icon"
               required
             />
           </div>
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Associated Trip</label>
+            <label className="form-label">Associated Shipment</label>
             <select name="trip" value={formData.trip} onChange={handleChange} className="form-input no-icon">
               <option value="">Standalone / Unlinked</option>
               {trips.map(t => (
@@ -106,43 +106,43 @@ export const MemoryModal = ({ isOpen, onClose, onSave, trips = [], memoryToEdit 
             />
           </div>
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Location</label>
+            <label className="form-label">Hub / Location Address</label>
             <input
               type="text"
               name="location"
               value={formData.location}
               onChange={handleChange}
-              placeholder="Kyoto, Japan"
+              placeholder="Rotterdam Hub 4, Netherlands"
               className="form-input no-icon"
             />
           </div>
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Mood</label>
+            <label className="form-label">Dispatch Status</label>
             <select name="mood" value={formData.mood} onChange={handleChange} className="form-input no-icon">
-              <option value="Happy">Happy 😊</option>
-              <option value="Inspired">Inspired 💡</option>
-              <option value="Relaxed">Relaxed 😌</option>
-              <option value="Adventurous">Adventurous ⛰️</option>
-              <option value="Romantic">Romantic ❤️</option>
-              <option value="Nostalgic">Nostalgic 🌅</option>
+              <option value="Happy">Excellent 😊</option>
+              <option value="Inspired">On Schedule 💡</option>
+              <option value="Relaxed">Normal 😌</option>
+              <option value="Adventurous">Customs Check ⛰️</option>
+              <option value="Romantic">Priority ❤️</option>
+              <option value="Nostalgic">Delayed 🌅</option>
             </select>
           </div>
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Weather</label>
+            <label className="form-label">Route Condition</label>
             <select name="weather" value={formData.weather} onChange={handleChange} className="form-input no-icon">
-              <option value="Sunny">Sunny ☀️</option>
-              <option value="Cloudy">Cloudy ⛅</option>
-              <option value="Rainy">Rainy 🌧️</option>
-              <option value="Snowy">Snowy ❄️</option>
-              <option value="Windy">Windy 🌬️</option>
-              <option value="Clear">Clear 🌙</option>
+              <option value="Sunny">Clear ☀️</option>
+              <option value="Cloudy">Moderate Fog ⛅</option>
+              <option value="Rainy">Rain / Storm 🌧️</option>
+              <option value="Snowy">Ice / Blizzard ❄️</option>
+              <option value="Windy">High Winds 🌬️</option>
+              <option value="Clear">Normal Night 🌙</option>
             </select>
           </div>
         </div>
 
         {/* Rating Star Selection */}
         <div className="form-group" style={{ marginBottom: 0 }}>
-          <label className="form-label">Experience Rating</label>
+          <label className="form-label">Route Delivery Rating</label>
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -165,13 +165,13 @@ export const MemoryModal = ({ isOpen, onClose, onSave, trips = [], memoryToEdit 
 
         {/* Description Rich Content */}
         <div className="form-group" style={{ marginBottom: 0 }}>
-          <label className="form-label">Journal Story & Reflections *</label>
+          <label className="form-label">Event Log & Description *</label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
             rows={5}
-            placeholder="Write your day's journey, feelings, places visited, and memorable moments..."
+            placeholder="Write shipment checkpoint details, delay descriptions, handler logs, or container seal verification..."
             className="form-input no-icon"
             style={{ resize: 'vertical' }}
             required
@@ -181,7 +181,7 @@ export const MemoryModal = ({ isOpen, onClose, onSave, trips = [], memoryToEdit 
         {/* Photo URL & Tags */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Photo Image URL</label>
+            <label className="form-label">Document Attachment URL</label>
             <input
               type="url"
               name="photoUrl"
@@ -198,7 +198,7 @@ export const MemoryModal = ({ isOpen, onClose, onSave, trips = [], memoryToEdit 
               name="tags"
               value={formData.tags}
               onChange={handleChange}
-              placeholder="Sunset, Shrine, Matcha"
+              placeholder="Lading, Customs, Transit"
               className="form-input no-icon"
             />
           </div>
@@ -210,10 +210,12 @@ export const MemoryModal = ({ isOpen, onClose, onSave, trips = [], memoryToEdit 
             Cancel
           </button>
           <button type="submit" className="btn btn-primary">
-            {memoryToEdit ? 'Save Memory' : 'Publish Memory'}
+            {memoryToEdit ? 'Save Event Log' : 'Publish Event Log'}
           </button>
         </div>
       </form>
     </Modal>
   );
 };
+
+export default MemoryModal;

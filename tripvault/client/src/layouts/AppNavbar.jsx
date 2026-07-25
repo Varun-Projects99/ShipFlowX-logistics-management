@@ -72,7 +72,7 @@ export const AppNavbar = ({ onToggleSidebar }) => {
             <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
             <input
               type="text"
-              placeholder="Global Search: Trips, destinations, photos, stories, tags..."
+              placeholder="Search Shipments, Tracking Number, Customer Name, Invoice ID..."
               style={{
                 width: '100%',
                 padding: '0.5rem 1rem 0.5rem 2.6rem',

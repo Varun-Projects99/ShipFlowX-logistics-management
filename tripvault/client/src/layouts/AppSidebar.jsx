@@ -25,11 +25,11 @@ export const AppSidebar = ({ isOpen, onClose }) => {
 
   const navItems = [
     { label: 'Dashboard', path: ROUTES.DASHBOARD, icon: LayoutDashboard },
-    { label: 'My Trips', path: ROUTES.TRIPS, icon: MapPin },
-    { label: 'Gallery', path: ROUTES.GALLERY, icon: ImageIcon },
-    { label: 'Timeline', path: ROUTES.TIMELINE, icon: Clock },
-    { label: 'Statistics', path: ROUTES.STATISTICS, icon: BarChart3 },
-    { label: 'Favorites', path: ROUTES.FAVORITES, icon: Heart },
+    { label: 'Shipments', path: ROUTES.TRIPS, icon: MapPin },
+    { label: 'Shipment Documents', path: ROUTES.GALLERY, icon: ImageIcon },
+    { label: 'Transit Timeline', path: ROUTES.TIMELINE, icon: Clock },
+    { label: 'Analytics', path: ROUTES.STATISTICS, icon: BarChart3 },
+    { label: 'Starred Shipments', path: ROUTES.FAVORITES, icon: Heart },
     { label: 'Profile', path: ROUTES.PROFILE, icon: User },
     { label: 'Settings', path: ROUTES.SETTINGS, icon: SettingsIcon },
   ];

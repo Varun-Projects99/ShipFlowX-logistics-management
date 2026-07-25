@@ -42,7 +42,7 @@ export const MemoriesPage = () => {
       if (memRes.data.success) setMemories(memRes.data.data);
       if (tripsRes.data.success) setTrips(tripsRes.data.data);
     } catch (err) {
-      console.error('Failed to fetch memories:', err.message);
+      console.error('Failed to fetch shipment logs:', err.message);
     } finally {
       setLoading(false);
     }
@@ -63,17 +63,17 @@ export const MemoriesPage = () => {
       setSelectedMemory(null);
       fetchData();
     } catch (err) {
-      alert(err.message || 'Failed to save memory');
+      alert(err.message || 'Failed to save shipment log');
     }
   };
 
   const handleDeleteMemory = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this memory entry?')) return;
+    if (!window.confirm('Are you sure you want to delete this shipment log entry?')) return;
     try {
       await API.delete(`/memories/${id}`);
       fetchData();
     } catch (err) {
-      alert(err.message || 'Failed to delete memory');
+      alert(err.message || 'Failed to delete shipment log');
     }
   };
 
@@ -82,8 +82,32 @@ export const MemoriesPage = () => {
       await API.post('/favorites/toggle', { itemType: 'memory', itemId: id });
       fetchData();
     } catch (err) {
-      alert(err.message || 'Failed to toggle favorite');
+      alert(err.message || 'Failed to toggle star status');
     }
+  };
+
+  // Maps backend enum values to logistics terminology for display
+  const mapStatusDisplay = (mood) => {
+    const mapping = {
+      'Happy': 'Excellent',
+      'Inspired': 'On Schedule',
+      'Relaxed': 'Normal',
+      'Adventurous': 'Customs Check',
+      'Romantic': 'Priority',
+      'Nostalgic': 'Delayed'
+    };
+    return mapping[mood] || mood;
+  };
+
+  const mapConditionDisplay = (weather) => {
+    const mapping = {
+      'Sunny': 'Clear',
+      'Cloudy': 'Moderate Fog',
+      'Rainy': 'Rain / Storm',
+      'Snowy': 'Ice / Blizzard',
+      'Windy': 'High Winds'
+    };
+    return mapping[weather] || weather;
   };
 
   return (
@@ -92,15 +116,15 @@ export const MemoriesPage = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', fontWeight: 800 }}>
-            Memory <span className="gradient-text">Journal</span>
+            Transit <span className="gradient-text">Timeline</span>
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.925rem' }}>
-            Rich day-by-day logs, stories, ratings, and emotional highlights ({memories.length} Entries)
+            Log of cargo transit checkpoints, delivery feedback, and route exceptions ({memories.length} Logs)
           </p>
         </div>
 
         <button onClick={() => { setSelectedMemory(null); setModalOpen(true); }} className="btn btn-primary">
-          <Plus size={18} /> Log New Memory
+          <Plus size={18} /> Log Shipment Event
         </button>
       </div>
 
@@ -111,7 +135,7 @@ export const MemoriesPage = () => {
           <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
           <input
             type="text"
-            placeholder="Search memories by story, location, or tag..."
+            placeholder="Search shipment logs by description, hub, or tag..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="form-input"
@@ -121,22 +145,22 @@ export const MemoriesPage = () => {
         {/* Filters & View Mode Toggle */}
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
           <select value={moodFilter} onChange={(e) => setMoodFilter(e.target.value)} className="form-input no-icon" style={{ width: 'auto' }}>
-            <option value="All">All Moods</option>
-            <option value="Happy">Happy 😊</option>
-            <option value="Inspired">Inspired 💡</option>
-            <option value="Relaxed">Relaxed 😌</option>
-            <option value="Adventurous">Adventurous ⛰️</option>
-            <option value="Romantic">Romantic ❤️</option>
-            <option value="Nostalgic">Nostalgic 🌅</option>
+            <option value="All">All Dispatch Ratings</option>
+            <option value="Happy">Excellent 😊</option>
+            <option value="Inspired">On Schedule 💡</option>
+            <option value="Relaxed">Normal 😌</option>
+            <option value="Adventurous">Customs Check ⛰️</option>
+            <option value="Romantic">Priority ❤️</option>
+            <option value="Nostalgic">Delayed 🌅</option>
           </select>
 
           <select value={weatherFilter} onChange={(e) => setWeatherFilter(e.target.value)} className="form-input no-icon" style={{ width: 'auto' }}>
-            <option value="All">All Weather</option>
-            <option value="Sunny">Sunny ☀️</option>
-            <option value="Cloudy">Cloudy ⛅</option>
-            <option value="Rainy">Rainy 🌧️</option>
-            <option value="Snowy">Snowy ❄️</option>
-            <option value="Windy">Windy 🌬️</option>
+            <option value="All">All Route Conditions</option>
+            <option value="Sunny">Clear ☀️</option>
+            <option value="Cloudy">Moderate Fog ⛅</option>
+            <option value="Rainy">Rain / Storm 🌧️</option>
+            <option value="Snowy">Ice / Blizzard ❄️</option>
+            <option value="Windy">High Winds 🌬️</option>
           </select>
 
           <div style={{ display: 'flex', backgroundColor: 'rgba(15, 23, 42, 0.6)', padding: '2px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
@@ -161,17 +185,17 @@ export const MemoriesPage = () => {
       {/* Content View */}
       {loading ? (
         <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>
-          Loading journal entries...
+          Loading shipment logs...
         </div>
       ) : memories.length === 0 ? (
         <div className="glass-card" style={{ padding: '4rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <BookOpen size={48} color="var(--accent)" style={{ marginBottom: '1rem' }} />
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>No memories logged yet</h3>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>No shipment logs recorded yet</h3>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.925rem', maxWidth: '400px', marginBottom: '1.5rem' }}>
-            Log your daily stories, mood, weather, and ratings to keep your travel memory timeline alive.
+            Log transit updates, route conditions, status, and ratings to keep shipment logs updated.
           </p>
           <button onClick={() => { setSelectedMemory(null); setModalOpen(true); }} className="btn btn-primary">
-            <Plus size={18} /> Log New Memory
+            <Plus size={18} /> Log Shipment Event
           </button>
         </div>
       ) : viewMode === 'timeline' ? (
@@ -202,12 +226,12 @@ export const MemoriesPage = () => {
                       </span>
                       {mem.mood && (
                         <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                          Mood: <strong>{mem.mood}</strong>
+                          Status: <strong>{mapStatusDisplay(mem.mood)}</strong>
                         </span>
                       )}
                       {mem.weather && (
                         <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                          Weather: <strong>{mem.weather}</strong>
+                          Condition: <strong>{mapConditionDisplay(mem.weather)}</strong>
                         </span>
                       )}
                     </div>
@@ -238,8 +262,8 @@ export const MemoriesPage = () => {
 
                 {/* Location & Trip Tag */}
                 <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem', color: 'var(--text-dim)' }}>
-                  {mem.location && <span>📍 {mem.location}</span>}
-                  {mem.trip && <span>✈️ Trip: {mem.trip.title}</span>}
+                  {mem.location && <span>📍 Hub Location: {mem.location}</span>}
+                  {mem.trip && <span>🚢 Shipment: {mem.trip.title}</span>}
                 </div>
 
                 {/* Description Content */}
@@ -280,7 +304,7 @@ export const MemoriesPage = () => {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-color)', paddingTop: '0.75rem', marginTop: 'auto' }}>
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
-                  Mood: {mem.mood}
+                  Status: {mapStatusDisplay(mem.mood)}
                 </span>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <button onClick={() => { setSelectedMemory(mem); setModalOpen(true); }} style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}>
@@ -307,3 +331,5 @@ export const MemoriesPage = () => {
     </div>
   );
 };
+
+export default MemoriesPage;

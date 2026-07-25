@@ -96,7 +96,7 @@ export const LoginPage = () => {
             Welcome Back
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            {appConfig.appName === 'ShipFlowX' ? 'Log in to manage enterprise logistics & tracking' : 'Log in to access your travel memory journal'}
+            Log in to manage enterprise logistics & tracking
           </p>
         </div>
 

@@ -26,7 +26,7 @@ export const GalleryPage = () => {
       if (photosRes.data.success) setPhotos(photosRes.data.data);
       if (tripsRes.data.success) setTrips(tripsRes.data.data);
     } catch (err) {
-      console.error('Failed to load gallery:', err.message);
+      console.error('Failed to load documents:', err.message);
     } finally {
       setLoading(false);
     }
@@ -44,18 +44,18 @@ export const GalleryPage = () => {
         setActiveLightboxPhoto(prev => ({ ...prev, isFavorite: !prev.isFavorite }));
       }
     } catch (err) {
-      alert(err.message || 'Failed to toggle favorite');
+      alert(err.message || 'Failed to toggle star status');
     }
   };
 
   const handleDeletePhoto = async (photoId) => {
-    if (!window.confirm('Delete this photo from your vault?')) return;
+    if (!window.confirm('Delete this document from your vault?')) return;
     try {
       await API.delete(`/photos/${photoId}`);
       if (activeLightboxPhoto?._id === photoId) setActiveLightboxPhoto(null);
       fetchData();
     } catch (err) {
-      alert(err.message || 'Failed to delete photo');
+      alert(err.message || 'Failed to delete document');
     }
   };
 
@@ -65,15 +65,15 @@ export const GalleryPage = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', fontWeight: 800 }}>
-            Photo <span className="gradient-text">Gallery</span>
+            Shipment <span className="gradient-text">Documents</span>
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.925rem' }}>
-            High-resolution visual memories captured from your journeys ({photos.length} Photos)
+            High-resolution delivery receipts, custom invoices, and bills of lading ({photos.length} Documents)
           </p>
         </div>
 
         <button onClick={() => setUploadModalOpen(true)} className="btn btn-primary">
-          <Upload size={18} /> Upload Photos
+          <Upload size={18} /> Upload Documents
         </button>
       </div>
 
@@ -81,11 +81,11 @@ export const GalleryPage = () => {
       <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-            <Filter size={16} /> Filter Gallery:
+            <Filter size={16} /> Filter Documents:
           </div>
 
           <select value={selectedTrip} onChange={(e) => setSelectedTrip(e.target.value)} className="form-input no-icon" style={{ width: 'auto' }}>
-            <option value="">All Associated Trips</option>
+            <option value="">All Associated Shipments</option>
             {trips.map(t => (
               <option key={t._id} value={t._id}>{t.title} ({t.country})</option>
             ))}
@@ -97,29 +97,29 @@ export const GalleryPage = () => {
             style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
           >
             <Heart size={16} fill={onlyFavorites ? '#FFF' : 'transparent'} />
-            {onlyFavorites ? 'Showing Favorites' : 'Show Favorites Only'}
+            {onlyFavorites ? 'Showing Starred' : 'Show Starred Only'}
           </button>
         </div>
 
         <div style={{ fontSize: '0.875rem', color: 'var(--text-dim)' }}>
-          Showing <strong>{photos.length}</strong> photo(s)
+          Showing <strong>{photos.length}</strong> document(s)
         </div>
       </div>
 
       {/* Photos Wall Grid */}
       {loading ? (
         <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>
-          Loading photo gallery...
+          Loading shipment documents...
         </div>
       ) : photos.length === 0 ? (
         <div className="glass-card" style={{ padding: '4rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <ImageIcon size={48} color="var(--accent)" style={{ marginBottom: '1rem' }} />
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>No photos found</h3>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>No documents found</h3>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.925rem', maxWidth: '400px', marginBottom: '1.5rem' }}>
-            Upload high-res trip photos to populate your interactive memory gallery!
+            Upload shipment invoice images or delivery docs to populate your digital logs!
           </p>
           <button onClick={() => setUploadModalOpen(true)} className="btn btn-primary">
-            <Upload size={18} /> Upload Photos
+            <Upload size={18} /> Upload Documents
           </button>
         </div>
       ) : (
@@ -181,7 +181,7 @@ export const GalleryPage = () => {
                 <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
                   <div>
                     <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#FFF', display: 'block' }}>
-                      {photo.caption || 'Trip Photo'}
+                      {photo.caption || 'Shipment Document'}
                     </span>
                     {photo.trip && (
                       <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -220,3 +220,5 @@ export const GalleryPage = () => {
     </div>
   );
 };
+
+export default GalleryPage;
