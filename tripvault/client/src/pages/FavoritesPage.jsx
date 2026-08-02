@@ -17,7 +17,7 @@ export const FavoritesPage = () => {
         setFavorites(res.data.data);
       }
     } catch (err) {
-      console.error('Failed to load starred items:', err.message);
+      console.error('Failed to load favorites:', err.message);
     } finally {
       setLoading(false);
     }
@@ -33,7 +33,7 @@ export const FavoritesPage = () => {
       fetchFavorites();
       if (lightboxPhoto && lightboxPhoto._id === id) setLightboxPhoto(null);
     } catch (err) {
-      alert(err.message || 'Failed to update star status');
+      alert(err.message || 'Failed to toggle favorite');
     }
   };
 
@@ -42,10 +42,10 @@ export const FavoritesPage = () => {
       {/* Header */}
       <div>
         <h1 style={{ fontSize: '2rem', fontWeight: 800 }}>
-          Starred <span className="gradient-text">Operations</span>
+          My <span className="gradient-text">Favorites</span>
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.925rem' }}>
-          Your bookmarked shipments, starred documents, and critical transit timeline records
+          Your bookmarked trips, favorite photos, and cherished journal entries
         </p>
       </div>
 
@@ -55,28 +55,28 @@ export const FavoritesPage = () => {
           onClick={() => setActiveTab('trips')}
           className={`btn ${activeTab === 'trips' ? 'btn-primary' : 'btn-outline'}`}
         >
-          <MapPin size={16} /> Starred Shipments ({favorites.trips.length})
+          <MapPin size={16} /> Favorite Trips ({favorites.trips.length})
         </button>
         <button
           onClick={() => setActiveTab('photos')}
           className={`btn ${activeTab === 'photos' ? 'btn-primary' : 'btn-outline'}`}
         >
-          <ImageIcon size={16} /> Starred Documents ({favorites.photos.length})
+          <ImageIcon size={16} /> Favorite Photos ({favorites.photos.length})
         </button>
         <button
           onClick={() => setActiveTab('memories')}
           className={`btn ${activeTab === 'memories' ? 'btn-primary' : 'btn-outline'}`}
         >
-          <BookOpen size={16} /> Starred Logs ({favorites.memories.length})
+          <BookOpen size={16} /> Favorite Memories ({favorites.memories.length})
         </button>
       </div>
 
       {/* Content */}
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>Loading starred records...</div>
+        <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>Loading favorites...</div>
       ) : activeTab === 'trips' ? (
         favorites.trips.length === 0 ? (
-          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No starred shipments saved yet. Click the icon on any shipment card to pin it here.</div>
+          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No favorite trips saved yet. Click the heart icon on any trip card to add it here.</div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
             {favorites.trips.map(trip => (
@@ -85,7 +85,7 @@ export const FavoritesPage = () => {
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>📍 {trip.destination}, {trip.country}</p>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
                   <span style={{ fontSize: '0.8rem', color: 'var(--primary)' }}>
-                    {trip.status === 'Upcoming' ? 'Booked' : trip.status === 'Ongoing' ? 'In Transit' : trip.status === 'Completed' ? 'Delivered' : 'Cancelled'}
+                    {trip.status}
                   </span>
                   <button onClick={() => handleToggleFavorite('trip', trip._id)} style={{ background: 'none', border: 'none', color: 'var(--error)', cursor: 'pointer' }}>
                     <Heart size={18} fill="var(--error)" />
@@ -97,7 +97,7 @@ export const FavoritesPage = () => {
         )
       ) : activeTab === 'photos' ? (
         favorites.photos.length === 0 ? (
-          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No starred documents saved yet.</div>
+          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No favorite photos saved yet.</div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1.25rem' }}>
             {favorites.photos.map(photo => (
@@ -109,7 +109,7 @@ export const FavoritesPage = () => {
         )
       ) : (
         favorites.memories.length === 0 ? (
-          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No starred timeline logs saved yet.</div>
+          <div className="glass-card" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>No favorite memories saved yet.</div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {favorites.memories.map(mem => (

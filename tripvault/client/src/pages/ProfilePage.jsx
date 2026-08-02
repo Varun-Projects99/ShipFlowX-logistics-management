@@ -37,7 +37,7 @@ export const ProfilePage = () => {
         name: user.name || '',
         email: user.email || '',
         bio: user.bio || '',
-        country: user.country || 'Global Operator',
+        country: user.country || 'Global Traveler',
         language: user.language || 'English',
         avatarUrl: user.avatarUrl || '',
         instagram: user.socialLinks?.instagram || '',
@@ -105,7 +105,7 @@ export const ProfilePage = () => {
   };
 
   const handleDeleteAccount = async () => {
-    const confirmation = window.prompt('WARNING: This will permanently delete your account and ALL logistics data! Type "DELETE" to confirm:');
+    const confirmation = window.prompt('WARNING: This will permanently delete your account and ALL travel data! Type "DELETE" to confirm:');
     if (confirmation !== 'DELETE') return;
 
     try {
@@ -124,7 +124,7 @@ export const ProfilePage = () => {
           User <span className="gradient-text">Profile</span>
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.925rem' }}>
-          Manage your personal details, logistics preferences, and account security
+          Manage your personal details, travel preferences, and account security
         </p>
       </div>
 
@@ -184,17 +184,17 @@ export const ProfilePage = () => {
             />
           </div>
           <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label">Preferred Cargo Type</label>
+            <label className="form-label">Preferred Travel Type</label>
             <select
               value={profileData.preferredTravelType}
               onChange={(e) => setProfileData({ ...profileData, preferredTravelType: e.target.value })}
               className="form-input no-icon"
             >
-              <option value="Adventure">Hazardous Materials</option>
-              <option value="Solo">Express / Critical</option>
-              <option value="Family">Dry Cargo</option>
-              <option value="Friends">Bulk Freight</option>
-              <option value="Business">Cold Chain / Temp-Controlled</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Solo">Solo</option>
+              <option value="Family">Family</option>
+              <option value="Friends">Friends</option>
+              <option value="Business">Business</option>
             </select>
           </div>
         </div>
@@ -211,7 +211,7 @@ export const ProfilePage = () => {
         </div>
 
         <div className="form-group" style={{ marginBottom: 0 }}>
-          <label className="form-label">Bio & Operator Intro</label>
+          <label className="form-label">Bio & Traveler Intro</label>
           <textarea
             rows={3}
             value={profileData.bio}
@@ -287,7 +287,7 @@ export const ProfilePage = () => {
           <ShieldAlert size={20} /> Danger Zone
         </h3>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
-          Permanently delete your user account and erase all associated shipment records, documents, timelines, and stats.
+          Permanently delete your user account and erase all associated travel journals, photos, memories, and stats.
         </p>
         <button onClick={handleDeleteAccount} className="btn" style={{ backgroundColor: 'var(--error)', color: '#FFF' }}>
           <Trash2 size={16} /> Delete Account Permanently

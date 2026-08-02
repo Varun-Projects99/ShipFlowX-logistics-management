@@ -61,7 +61,7 @@ export const DashboardPage = () => {
       setTripModalOpen(false);
       fetchDashboardData();
     } catch (err) {
-      alert(err.message || 'Error booking shipment');
+      alert(err.message || 'Error creating trip');
     }
   };
 
@@ -71,19 +71,19 @@ export const DashboardPage = () => {
       setMemoryModalOpen(false);
       fetchDashboardData();
     } catch (err) {
-      alert(err.message || 'Error adding shipment record');
+      alert(err.message || 'Error creating memory');
     }
   };
 
-  const userName = user?.name || 'Operator';
+  const userName = user?.name || 'Traveler';
 
   const statCards = [
-    { label: 'Active Shipments', value: stats?.totalTrips || 0, icon: MapPin, color: '#3B82F6', bg: 'rgba(59, 130, 246, 0.12)' },
-    { label: 'Delivered Shipments', value: stats?.totalCountries || 0, icon: Globe, color: '#F59E0B', bg: 'rgba(245, 158, 11, 0.12)' },
-    { label: 'In Transit', value: stats?.totalCities || 0, icon: Compass, color: '#818CF8', bg: 'rgba(129, 140, 248, 0.12)' },
-    { label: 'Pending Deliveries', value: stats?.totalPhotos || 0, icon: ImageIcon, color: '#22C55E', bg: 'rgba(34, 197, 94, 0.12)' },
-    { label: 'Cancelled Shipments', value: stats?.totalMemories || 0, icon: BookOpen, color: '#06B6D4', bg: 'rgba(6, 182, 212, 0.12)' },
-    { label: 'Total Freight Cost', value: `$${stats?.budgetSpent || 0}`, icon: DollarSign, color: '#EC4899', bg: 'rgba(236, 72, 153, 0.12)' }
+    { label: 'My Trips', value: stats?.totalTrips || 0, icon: MapPin, color: '#3B82F6', bg: 'rgba(59, 130, 246, 0.12)' },
+    { label: 'Countries Visited', value: stats?.totalCountries || 0, icon: Globe, color: '#F59E0B', bg: 'rgba(245, 158, 11, 0.12)' },
+    { label: 'Cities Explored', value: stats?.totalCities || 0, icon: Compass, color: '#818CF8', bg: 'rgba(129, 140, 248, 0.12)' },
+    { label: 'Uploaded Photos', value: stats?.totalPhotos || 0, icon: ImageIcon, color: '#22C55E', bg: 'rgba(34, 197, 94, 0.12)' },
+    { label: 'Logged Memories', value: stats?.totalMemories || 0, icon: BookOpen, color: '#06B6D4', bg: 'rgba(6, 182, 212, 0.12)' },
+    { label: 'Budget Spent', value: `$${stats?.budgetSpent || 0}`, icon: DollarSign, color: '#EC4899', bg: 'rgba(236, 72, 153, 0.12)' }
   ];
 
   return (
@@ -99,13 +99,13 @@ export const DashboardPage = () => {
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent)', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}>
             <Sparkles size={16} />
-            <span>Enterprise Logistics Intelligence Center</span>
+            <span>Personal Travel Vault & Activity Hub</span>
           </div>
           <h1 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)', fontWeight: 800, marginBottom: '0.5rem' }}>
             Welcome, <span className="gradient-text">{userName}</span>! 👋
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '1rem', maxWidth: '650px', lineHeight: 1.6 }}>
-            Manage shipments, monitor deliveries, analyze logistics performance and oversee transportation operations from a centralized enterprise dashboard.
+            Track your journeys, capture photos, and preserve your adventures in your global digital memory vault.
           </p>
         </div>
       </div>
@@ -113,14 +113,14 @@ export const DashboardPage = () => {
       {/* Dynamic Statistics Grid */}
       <div>
         <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>
-          Shipment Analytics Dashboard
+          Real-Time Travel Metrics
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.25rem' }}>
           {statCards.map((card, idx) => {
             const Icon = card.icon;
             return (
               <div key={idx} className="glass-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>{card.label}</span>
                   <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: card.bg, color: card.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Icon size={18} />
@@ -138,7 +138,7 @@ export const DashboardPage = () => {
       {/* Travel Map Section */}
       <div>
         <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>
-          Global Shipment Tracking Map
+          Interactive Travel Map
         </h2>
         <InteractiveTravelMap trips={trips} height="320px" />
       </div>
@@ -148,7 +148,7 @@ export const DashboardPage = () => {
         {/* Working Quick Actions */}
         <div>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>
-            Shipment Operations
+            Quick Actions
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div
@@ -161,8 +161,8 @@ export const DashboardPage = () => {
                   <PlusCircle size={22} />
                 </div>
                 <div>
-                  <div style={{ fontSize: '1rem', fontWeight: 600 }}>Book Shipment</div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Register a new freight dispatch record</div>
+                  <div style={{ fontSize: '1rem', fontWeight: 600 }}>Create Trip</div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Start documenting a new travel journey</div>
                 </div>
               </div>
               <ArrowUpRight size={18} style={{ color: 'var(--text-dim)' }} />
@@ -178,8 +178,8 @@ export const DashboardPage = () => {
                   <Upload size={22} />
                 </div>
                 <div>
-                  <div style={{ fontSize: '1rem', fontWeight: 600 }}>Upload Shipment Documents</div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Attach invoices, receipts, and lading docs</div>
+                  <div style={{ fontSize: '1rem', fontWeight: 600 }}>Upload Photos</div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Add high-res photos to gallery</div>
                 </div>
               </div>
               <ArrowUpRight size={18} style={{ color: 'var(--text-dim)' }} />
@@ -195,8 +195,8 @@ export const DashboardPage = () => {
                   <Eye size={22} />
                 </div>
                 <div>
-                  <div style={{ fontSize: '1rem', fontWeight: 600 }}>Log Shipment Record</div>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Update cargo transit updates & checkpoints</div>
+                  <div style={{ fontSize: '1rem', fontWeight: 600 }}>Log Memory</div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Record day-by-day story & rating</div>
                 </div>
               </div>
               <ArrowUpRight size={18} style={{ color: 'var(--text-dim)' }} />
@@ -207,40 +207,30 @@ export const DashboardPage = () => {
         {/* Dynamic Activity Stream */}
         <div>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>
-            Shipment Activity Feed
+            Recent Activity Stream
           </h2>
           <div className="glass-card" style={{ padding: '1.25rem', minHeight: '260px' }}>
             {!stats?.activities || stats.activities.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '2rem 1rem', color: 'var(--text-muted)' }}>
                 <Clock size={32} style={{ marginBottom: '0.5rem', color: 'var(--text-dim)' }} />
-                <p style={{ fontSize: '0.925rem' }}>No shipment logs or activities recorded yet.</p>
+                <p style={{ fontSize: '0.925rem' }}>No trips or activities logged yet.</p>
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {stats.activities.map((act) => {
-                  // Map travel terms in activities to logistics terms dynamically
-                  let displayTitle = act.title
-                    .replace(/Trip Created/g, 'Shipment Created')
-                    .replace(/Trip Edited/g, 'Shipment Updated')
-                    .replace(/Trip Deleted/g, 'Shipment Removed')
-                    .replace(/Photo Uploaded/g, 'Document Attached')
-                    .replace(/Memory Added/g, 'Log Record Added');
-                  
-                  return (
-                    <div key={act._id} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
-                      <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--primary)', marginTop: '6px' }} />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-main)' }}>
-                          {displayTitle}
-                        </div>
-                        {act.details && <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{act.details.replace(/trip/gi, 'shipment')}</div>}
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '0.2rem' }}>
-                          {new Date(act.createdAt).toLocaleString()}
-                        </div>
+                {stats.activities.map((act) => (
+                  <div key={act._id} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'var(--primary)', marginTop: '6px' }} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                        {act.title}
+                      </div>
+                      {act.details && <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{act.details}</div>}
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '0.2rem' }}>
+                        {new Date(act.createdAt).toLocaleString()}
                       </div>
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
             )}
           </div>

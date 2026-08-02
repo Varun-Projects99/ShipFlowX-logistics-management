@@ -1,65 +1,55 @@
-# 🚢 ShipFlowX - Enterprise Logistics Management & Real-Time Shipment Tracking Platform
+# 🗺️ TripVault - Travel Memory Journal Application
 
-> **ShipFlowX** is a modern, high-performance logistics management and shipment tracking system built with the **MERN Stack** (MongoDB, Express, React 19, Node.js). This update introduces professional Week 1 architectural improvements, structuring the project for enterprise maintainability without changing any existing UI/UX or business flows.
-
----
-
-## 🌟 Week 1 Architecture & Engineering Improvements
-
-- **Centralized Configuration (`src/config/appConfig.js`)**:
-  - Unifies application branding, versioning, default locale, theme settings, and pagination sizes.
-  - Dynamically resolved through Vite environment variables (`import.meta.env`) with safe local fallbacks.
-- **Reusable Loading Components (`src/components/common/`)**:
-  - **`Spinner.jsx`**: Fully customizable animated SVG loader with built-in WAI-ARIA loading accessibility support.
-  - **`Loader.jsx`**: Inline or block-level loading state wrapper.
-  - **`PageLoader.jsx`**: Full-screen page loader modal overlay for initial system boot or route changes.
-  - **`ButtonLoader.jsx`**: In-button loading spinner for active async transactions.
-- **Environment Configuration**:
-  - Added `.env.example` defining environment variables: `VITE_APP_NAME`, `VITE_API_URL`, `VITE_GOOGLE_CLIENT_ID`, `VITE_COMPANY_NAME`, `VITE_SUPPORT_EMAIL`.
-- **Constants Definition (`src/constants/`)**:
-  - **`routes.js`**: Core route path mapping constants (Landing, Dashboard, Login, profile, etc.).
-  - **`apiEndpoints.js`**: Reusable REST API endpoint definitions (Auth, Trips, Memories, Photos, etc.).
-  - **`colors.js`**: Core design system color theme constants.
-  - **`roles.js`**: System authorization roles (Admin, Dispatcher, Driver, Customer, User).
-  - **`shipmentStatus.js`**: Shipment status tracking variables (`PENDING`, `IN_TRANSIT`, `DELIVERED`, etc.).
-- **Utility Functions (`src/utils/`)**:
-  - **`dateFormatter.js`**: Reusable date formatters (relative times, standard locales).
-  - **`currencyFormatter.js`**: Locale-aware currency formatting with customizable fraction sizes.
-  - **`trackingNumberGenerator.js`**: Generates carrier-compliant unique tracking numbers.
-  - **`validators.js`**: client-side validation logic (email structures, password lengths).
-  - **`helpers.js`**: General helpers (debounce, truncate text, safe JSON parsing).
+> **TripVault** is a modern, interactive travel memory journal platform built with the **MERN Stack** (MongoDB, Express, React 19, Node.js) and styled with Vanilla CSS and Lucide Icons. It allows users to securely register, log in, create travel journals, upload high-resolution photos, document daily travel memories, and visualize their journeys on an interactive map.
 
 ---
 
-## 📁 Refactored Folder Structure
+## 🌟 Week 2 Deliverables: Trip Management (CRUD)
+
+All requirements for Week 2 have been successfully implemented:
+- **Trip Model & Schema**: Mongoose database schema structured with title, destination, startDate, endDate, description, rating, and user owner fields.
+- **Protected API Routes**:
+  - `POST /api/trips` - Create a new trip linked to the authenticated user.
+  - `GET /api/trips` - Retrieve trips belonging exclusively to the logged-in user.
+  - `GET /api/trips/:id` - Retrieve a single trip by ID with ownership verification.
+  - `PUT /api/trips/:id` - Update trip details (verifying ownership before saving).
+  - `DELETE /api/trips/:id` - Delete a trip permanently (verifying ownership before removal).
+- **Responsive CRUD UI**:
+  - Interactive **Dashboard** displaying travel statistics cards (My Trips, Cities Explored, Countries Visited, Uploaded Photos, Logged Memories, and Budget Spent) alongside a global trip map.
+  - **Create Trip Form** and **Edit Trip Form** modals equipped with fully validated fields (dates, currency selectors, ratings, and tags).
+  - **Delete Trip Confirmations** that auto-refresh the data stream upon removal.
+  - Graceful empty states when no trips are logged yet.
+
+---
+
+## 🛠️ Folder Structure & Architecture
 
 ```
 tripvault/
 ├── client/                     # Frontend React 19 + Vite Application
 │   ├── src/
-│   │   ├── assets/             # Static assets, images, and SVGs
 │   │   ├── config/             # Centralized config (appConfig.js)
 │   │   ├── constants/          # Reusable routes, colors, role constants
-│   │   ├── components/         # Reusable UI components
-│   │   │   └── common/         # PageLoader, ButtonLoader, Spinner, Modal
+│   │   ├── components/         # Reusable UI components (Spinner, PageLoader, ButtonLoader)
+│   │   │   ├── common/         # Layout components (Modal, Navbar, Sidebar)
+│   │   │   ├── trips/          # Trip modals and CRUD card containers
+│   │   │   ├── gallery/        # Lightbox and photo upload controllers
+│   │   │   └── memories/       # Journal timeline event modals
 │   │   ├── context/            # Global context state (AuthContext.jsx)
 │   │   ├── layouts/            # Layout shells (AppLayout, Navbar, Sidebar)
-│   │   ├── pages/              # Views (Dashboard, Login, Gallery, etc.)
+│   │   ├── pages/              # Views (Dashboard, Trips, Gallery, Memories, Stats, Favorites, Settings, Profile)
 │   │   ├── services/           # Axios HTTP API instance & interceptors
 │   │   ├── utils/              # Helper utilities (date, currency, validators)
-│   │   ├── styles/             # Global CSS design tokens
-│   │   ├── App.jsx             # React Router DOM configuration
-│   │   └── main.jsx            # React root entry point
-│   ├── .env.example            # Environment variables configuration template
+│   │   └── styles/             # Global CSS design tokens
 │   ├── index.html
 │   └── package.json
 │
 ├── server/                     # Backend Node.js + Express API
 │   ├── config/                 # Database connection (db.js)
-│   ├── controllers/            # Request handlers (authController.js)
+│   ├── controllers/            # Request handlers (authController.js, tripController.js)
 │   ├── middleware/             # Route protection middleware (authMiddleware.js)
-│   ├── models/                 # Mongoose schemas (User.js)
-│   ├── routes/                 # API route declarations (authRoutes.js)
+│   ├── models/                 # Mongoose schemas (User.js, Trip.js, Memory.js, Photo.js)
+│   ├── routes/                 # API route declarations (authRoutes.js, tripRoutes.js)
 │   └── index.js                # Express app entry point
 ```
 
@@ -67,10 +57,14 @@ tripvault/
 
 ## ⚡ Quick Start & Setup Guide
 
-### 1. Environment Variables Configuration
-Copy `.env.example` in the `client` directory to `.env` and fill in the values:
+### 1. Configure Local Environment
+Copy `.env.example` in both server and client directories to `.env`:
 ```bash
-cp client/.env.example client/.env
+# Inside tripvault/client
+cp .env.example .env
+
+# Inside tripvault/server
+cp .env.example .env
 ```
 
 ### 2. Launch Development Servers

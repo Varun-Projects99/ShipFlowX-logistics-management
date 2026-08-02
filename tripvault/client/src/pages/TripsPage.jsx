@@ -46,7 +46,7 @@ export const TripsPage = () => {
         setTrips(res.data.data);
       }
     } catch (err) {
-      console.error('Failed to fetch shipments:', err.message);
+      console.error('Failed to fetch trips:', err.message);
     } finally {
       setLoading(false);
     }
@@ -67,17 +67,17 @@ export const TripsPage = () => {
       setSelectedTrip(null);
       fetchTrips();
     } catch (err) {
-      alert(err.message || 'Error saving shipment record');
+      alert(err.message || 'Error saving trip');
     }
   };
 
   const handleDeleteTrip = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this shipment record?')) return;
+    if (!window.confirm('Are you sure you want to delete this trip journal?')) return;
     try {
       await API.delete(`/trips/${id}`);
       fetchTrips();
     } catch (err) {
-      alert(err.message || 'Failed to delete shipment');
+      alert(err.message || 'Failed to delete trip');
     }
   };
 
@@ -86,7 +86,7 @@ export const TripsPage = () => {
       await API.post(`/trips/${id}/duplicate`);
       fetchTrips();
     } catch (err) {
-      alert(err.message || 'Failed to duplicate shipment');
+      alert(err.message || 'Failed to duplicate trip');
     }
   };
 
@@ -104,20 +104,8 @@ export const TripsPage = () => {
       await API.post('/favorites/toggle', { itemType: 'trip', itemId: id });
       fetchTrips();
     } catch (err) {
-      alert(err.message || 'Failed to toggle star status');
+      alert(err.message || 'Failed to toggle favorite');
     }
-  };
-
-  // Maps backend enum values to logistics terminology for display
-  const mapCargoType = (type) => {
-    const mapping = {
-      'Solo': 'Express / Critical',
-      'Family': 'Dry Cargo',
-      'Friends': 'Bulk Freight',
-      'Business': 'Cold Chain / Temp-Controlled',
-      'Adventure': 'Hazardous Materials'
-    };
-    return mapping[type] || type;
   };
 
   return (
@@ -126,10 +114,10 @@ export const TripsPage = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <h1 style={{ fontSize: '2rem', fontWeight: 800 }}>
-            Active <span className="gradient-text">Shipments</span>
+            My <span className="gradient-text">Trips</span>
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.925rem' }}>
-            Manage, track, and organize your global shipment operations
+            Manage, plan, and organize your worldwide travel adventures
           </p>
         </div>
 
@@ -139,14 +127,14 @@ export const TripsPage = () => {
             className="btn btn-secondary"
           >
             <Compass size={18} />
-            {showMap ? 'Hide Map' : 'View Tracking Map'}
+            {showMap ? 'Hide Map' : 'View Travel Map'}
           </button>
           <button
             onClick={() => { setSelectedTrip(null); setModalOpen(true); }}
             className="btn btn-primary"
           >
             <Plus size={18} />
-            Book Shipment
+            Create Trip
           </button>
         </div>
       </div>
@@ -165,7 +153,7 @@ export const TripsPage = () => {
           <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)' }} />
           <input
             type="text"
-            placeholder="Search shipments by ID, destination, region, or tags..."
+            placeholder="Search trips by destination, country, or tag..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="form-input"
@@ -180,19 +168,19 @@ export const TripsPage = () => {
 
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="form-input no-icon" style={{ width: 'auto' }}>
             <option value="All">All Statuses</option>
-            <option value="Upcoming">Pending / Booked</option>
-            <option value="Ongoing">In Transit</option>
-            <option value="Completed">Delivered</option>
+            <option value="Upcoming">Upcoming</option>
+            <option value="Ongoing">Ongoing</option>
+            <option value="Completed">Completed</option>
             <option value="Cancelled">Cancelled</option>
           </select>
 
           <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className="form-input no-icon" style={{ width: 'auto' }}>
-            <option value="All">All Cargo Types</option>
-            <option value="Solo">Express / Critical</option>
-            <option value="Family">Dry Cargo</option>
-            <option value="Friends">Bulk Freight</option>
-            <option value="Business">Cold Chain / Temp-Controlled</option>
-            <option value="Adventure">Hazardous Materials</option>
+            <option value="All">All Travel Types</option>
+            <option value="Solo">Solo</option>
+            <option value="Family">Family</option>
+            <option value="Friends">Friends</option>
+            <option value="Business">Business</option>
+            <option value="Adventure">Adventure</option>
           </select>
 
           <button
@@ -206,20 +194,20 @@ export const TripsPage = () => {
         </div>
       </div>
 
-      {/* Shipment Cards Grid */}
+      {/* Trip Cards Grid */}
       {loading ? (
         <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>
-          Loading shipment records...
+          Loading your travel vault...
         </div>
       ) : trips.length === 0 ? (
         <div className="glass-card" style={{ padding: '4rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Compass size={48} color="var(--primary)" style={{ marginBottom: '1rem' }} />
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>No shipments found</h3>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>No trips found</h3>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.925rem', maxWidth: '400px', marginBottom: '1.5rem' }}>
-            {search || statusFilter !== 'All' ? 'Try adjusting your tracking filters.' : 'Start operations by booking your first shipment!'}
+            {search || statusFilter !== 'All' ? 'Try adjusting your search filters.' : 'Start your journey by creating your first travel journal!'}
           </p>
           <button onClick={() => { setSelectedTrip(null); setModalOpen(true); }} className="btn btn-primary">
-            <Plus size={18} /> Book New Shipment
+            <Plus size={18} /> Create New Trip
           </button>
         </div>
       ) : (
@@ -230,17 +218,12 @@ export const TripsPage = () => {
               trip.status === 'Ongoing' ? 'var(--accent)' :
               trip.status === 'Cancelled' ? 'var(--error)' : 'var(--primary)';
 
-            const displayStatus = 
-              trip.status === 'Upcoming' ? 'Booked' :
-              trip.status === 'Ongoing' ? 'In Transit' :
-              trip.status === 'Completed' ? 'Delivered' : 'Cancelled';
-
             return (
               <div key={trip._id} className="glass-card" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                 {/* Cover Image & Badges */}
                 <div style={{ position: 'relative', height: '180px' }}>
                   <img
-                    src={trip.coverImage || 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80'}
+                    src={trip.coverImage || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80'}
                     alt={trip.title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
@@ -286,25 +269,20 @@ export const TripsPage = () => {
                     gap: '0.35rem'
                   }}>
                     <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: statusColor }} />
-                    {displayStatus}
+                    {trip.status}
                   </div>
                 </div>
 
                 {/* Card Content */}
                 <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   <div>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.25rem' }}>
+                    <h3 style={{ fontSize: '1.2,rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '0.25rem' }}>
                       {trip.title}
                     </h3>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
                       <MapPin size={15} color="var(--primary)" />
                       {trip.destination}, {trip.country}
                     </div>
-                  </div>
-
-                  {/* Meta Details */}
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
-                    Type: <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{mapCargoType(trip.travelType)}</span>
                   </div>
 
                   {/* Details Grid */}
@@ -326,7 +304,7 @@ export const TripsPage = () => {
                         onClick={() => { setSelectedTrip(trip); setModalOpen(true); }}
                         className="btn btn-outline"
                         style={{ padding: '0.4rem 0.65rem', fontSize: '0.75rem' }}
-                        title="Edit Shipment"
+                        title="Edit Trip"
                       >
                         <Edit size={14} />
                       </button>
@@ -334,7 +312,7 @@ export const TripsPage = () => {
                         onClick={() => handleDuplicateTrip(trip._id)}
                         className="btn btn-outline"
                         style={{ padding: '0.4rem 0.65rem', fontSize: '0.75rem' }}
-                        title="Duplicate Shipment"
+                        title="Duplicate Trip"
                       >
                         <Copy size={14} />
                       </button>
@@ -342,7 +320,7 @@ export const TripsPage = () => {
                         onClick={() => handleToggleArchive(trip._id)}
                         className="btn btn-outline"
                         style={{ padding: '0.4rem 0.65rem', fontSize: '0.75rem' }}
-                        title={trip.isArchived ? 'Activate' : 'Archive'}
+                        title={trip.isArchived ? 'Unarchive' : 'Archive'}
                       >
                         <Archive size={14} />
                       </button>
@@ -351,7 +329,7 @@ export const TripsPage = () => {
                     <button
                       onClick={() => handleDeleteTrip(trip._id)}
                       style={{ background: 'none', border: 'none', color: 'var(--error)', cursor: 'pointer', padding: '0.4rem' }}
-                      title="Delete Shipment"
+                      title="Delete Trip"
                     >
                       <Trash2 size={16} />
                     </button>

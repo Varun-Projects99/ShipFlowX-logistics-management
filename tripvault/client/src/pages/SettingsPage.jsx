@@ -46,11 +46,11 @@ export const SettingsPage = () => {
         const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(res.data.data, null, 2))}`;
         const downloadAnchor = document.createElement('a');
         downloadAnchor.setAttribute('href', jsonString);
-        downloadAnchor.setAttribute('download', `ShipFlowX_Backup_${new Date().toISOString().split('T')[0]}.json`);
+        downloadAnchor.setAttribute('download', `TripVault_Backup_${new Date().toISOString().split('T')[0]}.json`);
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
-        setMessage('Your ShipFlowX data backup JSON has been exported successfully!');
+        setMessage('Your TripVault data backup JSON has been exported successfully!');
       }
     } catch (err) {
       alert(err.message || 'Failed to export data');
@@ -60,12 +60,12 @@ export const SettingsPage = () => {
   };
 
   const handleClearAllData = async () => {
-    const confirmText = window.prompt('Type "CLEAR ALL" to wipe all your shipments, documents, and logs while keeping your account active:');
+    const confirmText = window.prompt('Type "CLEAR ALL" to wipe all your trips, photos, and memories while keeping your account active:');
     if (confirmText !== 'CLEAR ALL') return;
 
     try {
       await API.delete('/user/data');
-      setMessage('All logistics data has been cleared from your account.');
+      setMessage('All travel data has been cleared from your account.');
     } catch (err) {
       alert(err.message || 'Failed to clear data');
     }
@@ -73,6 +73,7 @@ export const SettingsPage = () => {
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+      {/* Header */}
       <div>
         <h1 style={{ fontSize: '2rem', fontWeight: 800 }}>
           Application <span className="gradient-text">Settings</span>
@@ -95,7 +96,7 @@ export const SettingsPage = () => {
           <Download size={20} color="var(--primary)" /> Data Export & Backup
         </h3>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-          Download a complete JSON export of all your shipment routes, invoices, documents, logs, and statistics.
+          Download a complete JSON export of all your travel itineraries, photos, journal entries, and statistics.
         </p>
         <div>
           <button onClick={handleExportData} disabled={exporting} className="btn btn-primary">
@@ -112,8 +113,8 @@ export const SettingsPage = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
-              <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>Email Shipment Alerts</div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Receive notifications before upcoming shipment delivery target dates</div>
+              <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>Email Trip Reminders</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Receive notifications before upcoming trip start dates</div>
             </div>
             <ToggleSwitch
               checked={notifications.tripReminders}
@@ -142,7 +143,7 @@ export const SettingsPage = () => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>Private Vault Mode</div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Only authenticated account owner can view stored shipment details and documents</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Only authenticated account owner can view stored memories and photos</div>
           </div>
           <ToggleSwitch
             checked={privacy.privateVault}
@@ -154,10 +155,10 @@ export const SettingsPage = () => {
       {/* Data Cleanup */}
       <div className="glass-card" style={{ padding: '2rem', borderColor: 'rgba(239, 68, 68, 0.3)' }}>
         <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--error)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Trash2 size={20} /> Reset Logistics Vault Data
+          <Trash2 size={20} /> Reset Travel Vault Data
         </h3>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
-          Clear all shipments, documents, and transit timelines while maintaining your active account.
+          Clear all trips, photos, and memories while maintaining your active account.
         </p>
         <button onClick={handleClearAllData} className="btn" style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#FCA5A5', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
           <Trash2 size={16} /> Reset All Vault Data
