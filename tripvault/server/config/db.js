@@ -18,6 +18,7 @@ export const connectDB = async () => {
       const { MongoMemoryServer } = await import('mongodb-memory-server');
       memoryServer = await MongoMemoryServer.create();
       const fallbackUri = memoryServer.getUri();
+      await mongoose.disconnect(); // Clean up previous connection attempt first
       await mongoose.connect(fallbackUri);
       console.log(`[MongoDB] ✅ Embedded In-Memory Database connected successfully! Registration and Login are ready.`);
     } catch (memErr) {
@@ -27,7 +28,8 @@ export const connectDB = async () => {
 };
 
 export const isDBConnected = () => {
-  return mongoose.connection.readyState === 1;
+  const state = mongoose.connection.readyState;
+  return state === 1 || state === 2;
 };
 
 

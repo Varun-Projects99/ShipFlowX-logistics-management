@@ -127,7 +127,7 @@ export const RegisterPage = () => {
             Create Your Account
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            Start managing shipments and operations today
+            Start preserving your global adventures today
           </p>
         </div>
 

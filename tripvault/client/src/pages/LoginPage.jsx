@@ -96,7 +96,7 @@ export const LoginPage = () => {
             Welcome Back
           </h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            Log in to manage enterprise logistics & tracking
+            Log in to access your travel memory journal
           </p>
         </div>
 
