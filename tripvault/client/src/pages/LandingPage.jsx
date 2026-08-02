@@ -25,28 +25,28 @@ export const LandingPage = () => {
   const features = [
     {
       icon: BookOpen,
-      title: 'Shipment Ledger',
-      description: 'Document rich day-by-day status logs of your logistics operations and transit highlights.'
+      title: 'Memory Journal',
+      description: 'Document rich day-by-day logs of your worldwide adventures and travel highlights.'
     },
     {
       icon: ImageIcon,
-      title: 'Cargo Documents',
-      description: 'Organize high-resolution delivery photos and bill of lading documents linked to specific dispatches.'
+      title: 'Photo Gallery',
+      description: 'Organize high-resolution visual memories captured from your journeys, linked to specific trips.'
     },
     {
       icon: ShieldCheck,
       title: 'Secure Cloud Vault',
-      description: 'Your digital records are encrypted and stored safely with enterprise-grade JWT and MongoDB security.'
+      description: 'Your memories are encrypted and stored safely with robust JWT and MongoDB security.'
     },
     {
       icon: BarChart2,
-      title: 'Logistics Analytics',
-      description: 'Visualize dispatch performance, visited hub locations, and shipment delivery metrics.'
+      title: 'Travel Statistics',
+      description: 'Visualize travel metrics, most visited countries, coverage distance, and budget statistics.'
     },
     {
       icon: Calendar,
-      title: 'Transit Timeline',
-      description: 'Relive and monitor logistics status changes chronologically through an interactive timeline view.'
+      title: 'Interactive Timeline',
+      description: 'Relive and monitor travel memory updates chronologically through a beautiful timeline view.'
     }
   ];
 
@@ -77,7 +77,7 @@ export const LandingPage = () => {
             marginBottom: '1.5rem'
           }}>
             <Sparkles size={16} />
-            <span>Enterprise Logistics Dashboard</span>
+            <span>Personal Travel memory Journal</span>
           </div>
 
           {/* Logo & Headline */}
@@ -106,7 +106,7 @@ export const LandingPage = () => {
             marginBottom: '1rem',
             lineHeight: 1.3
           }}>
-            Streamline Logistics. <span className="gradient-text-accent">Real-Time Dispatch.</span>
+            Capture Memories. <span className="gradient-text-accent">Preserve Adventures.</span>
           </h2>
 
           <p style={{
@@ -116,11 +116,11 @@ export const LandingPage = () => {
             color: 'var(--text-muted)',
             lineHeight: 1.7
           }}>
-            Your secure portal for enterprise-grade dispatch management. Real-time routing, cargo photo logs, and automatic status updates in a beautifully unified workspace.
+            Your secure portal for travel logging. Pin destinations on the travel map, upload high-res memories, and relive your lifetime adventures in a beautifully unified workspace.
           </p>
 
           {/* Call to Action Buttons */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '12.5px', flexWrap: 'wrap' }}>
             {isAuthenticated ? (
               <Link to={ROUTES.DASHBOARD} className="btn btn-primary" style={{ padding: '0.9rem 2rem', fontSize: '1.05rem' }}>
                 Go to Dashboard
@@ -146,10 +146,10 @@ export const LandingPage = () => {
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
             <h3 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '0.75rem' }}>
-              Designed for Modern Logistics Teams
+              Designed for Passionate Travelers
             </h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '1rem', maxWidth: '550px', margin: '0 auto' }}>
-              Everything you need to track shipments, record transit checkpoints, and visualize operational performance.
+              Everything you need to pin trips, record journal logs, upload photos, and visualize travel statistics.
             </p>
           </div>
 

@@ -4,7 +4,7 @@
  */
 export const appConfig = {
   appName: import.meta.env.VITE_APP_NAME || 'TripVault',
-  appVersion: '2.0.0',
+  appVersion: '2.0.0', // Finalized Week 2 Release
   apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
   companyName: import.meta.env.VITE_COMPANY_NAME || 'TripVault Inc.',
   supportEmail: import.meta.env.VITE_SUPPORT_EMAIL || 'support@tripvault.com',
